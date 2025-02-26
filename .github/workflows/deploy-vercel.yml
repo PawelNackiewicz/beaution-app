@@ -1,6 +1,9 @@
 name: Build and Deploy to Vercel
 
 on:
+  pull_request:
+    branches:
+      - main
   workflow_dispatch:
     inputs:
       deploy-vercel:
@@ -11,9 +14,6 @@ on:
 env:
   VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
   VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}
-
-on:
-  pull_request:
 
 jobs:
   deploy:

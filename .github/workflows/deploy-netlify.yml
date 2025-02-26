@@ -1,16 +1,15 @@
 name: Build and Deploy to Netlify
 
 on:
+  pull_request:
+    branches:
+      - main
   workflow_dispatch:
     inputs:
       deploy-netlify:
         type: boolean
         description: Enable Netlify deployment
         default: true
-
-on:
-  push:
-  pull_request:
 
 jobs:
   deploy:
@@ -32,7 +31,7 @@ jobs:
 
       - name: Install dependencies
         run: pnpm install
-      
+
       - name: Lint code
         run: pnpm lint
 
