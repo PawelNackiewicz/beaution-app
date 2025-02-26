@@ -9,8 +9,8 @@ function App() {
   const environment = import.meta.env.VITE_APP_ENV || "unknown";
 
   return (
-    <>
-      <div>
+    <div className="w-full h-full flex flex-col items-center justify-center">
+      <div className="flex items-center gap-4">
         <a href="https://vite.dev" target="_blank">
           <img src={viteLogo} className="logo" alt="Vite logo" />
         </a>
@@ -31,7 +31,7 @@ function App() {
         Click on the Vite and React logos to learn more
       </p>
       <p>Env: {environment}</p>
-    </>
+    </div>
   );
 }
 
