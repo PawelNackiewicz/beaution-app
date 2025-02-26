@@ -1,7 +1,17 @@
 name: Build and Deploy to Netlify
+
+on:
+  workflow_dispatch:
+    inputs:
+      deploy-netlify:
+        type: boolean
+        description: Enable Netlify deployment
+        default: true
+
 on:
   push:
   pull_request:
+
 jobs:
   deploy:
     runs-on: ubuntu-latest

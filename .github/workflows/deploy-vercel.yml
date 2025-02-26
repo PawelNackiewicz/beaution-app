@@ -1,5 +1,13 @@
 name: Build and Deploy to Vercel
 
+on:
+  workflow_dispatch:
+    inputs:
+      deploy-vercel:
+        type: boolean
+        description: Enable Vercel deployment
+        default: true
+
 env:
   VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
   VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}
