@@ -4,12 +4,6 @@ on:
   pull_request:
     branches:
       - main
-  workflow_dispatch:
-    inputs:
-      deploy-vercel:
-        type: boolean
-        description: Enable Vercel deployment
-        default: true
 
 env:
   VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
@@ -46,17 +40,28 @@ jobs:
         run: pnpm vitest
 
       - name: Install Vercel CLI
-        if: ${{ inputs.deploy-vercel }}
         run: npm install --global vercel@canary
 
       - name: Pull Vercel Environment Information
-        if: ${{ inputs.deploy-vercel }}
         run: vercel pull --yes --environment=production --token=${{ secrets.VERCEL_TOKEN }}
 
       - name: Build Project Artifacts
-        if: ${{ inputs.deploy-vercel }}
         run: vercel build --prod --token=${{ secrets.VERCEL_TOKEN }}
 
       - name: Deploy Project Artifacts to Vercel
-        if: ${{ inputs.deploy-vercel }}
-        run: vercel deploy --prebuilt --prod --token=${{ secrets.VERCEL_TOKEN }}
+        run: |
+          DEPLOY_OUTPUT="$(vercel deploy --token=${{ secrets.VERCEL_TOKEN }})"
+          DEPLOY_URL=$(echo "$DEPLOY_OUTPUT" | grep http | tail -n 1 )
+          echo "DEPLOY_URL=$DEPLOY_URL" >> $GITHUB_ENV
+
+      - name: Comment with preview URL
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const { DEPLOY_URL } = process.env;
+            github.rest.issues.createComment({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: `Preview: ${DEPLOY_URL}`
+            })
