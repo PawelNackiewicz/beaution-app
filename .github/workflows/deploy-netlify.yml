@@ -1,54 +1,37 @@
-name: Build and Deploy to Netlify
+name: Deploy - Netlify
 
 on:
-  pull_request:
-    branches:
-      - main
-  workflow_dispatch:
-    inputs:
-      deploy-netlify:
-        type: boolean
-        description: Enable Netlify deployment
-        default: true
+  workflow_call:
 
 jobs:
-  deploy:
+  deploy-netlify:
+    environment:
+      name: "Development"
     runs-on: ubuntu-latest
+
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Install pnpm
-        uses: pnpm/action-setup@v4
-        with:
-          version: 9.9.0
-
-      - name: Set up Node.js version from .nvmrc
-        uses: actions/setup-node@v4
-        with:
-          node-version-file: .nvmrc
-          cache: "pnpm"
-
-      - name: Install dependencies
-        run: pnpm install
+      - name: Configure node
+        uses: ./.github/actions/setup-project
 
       - name: Lint code
-        run: pnpm lint
+        run: pnpm run lint
 
-      - name: Build
-        run: pnpm build
+      - name: Run unit tests
+        run: pnpm run test
 
-      - name: Test
-        run: pnpm vitest
+      - name: Build app
+        run: pnpm run build
 
       - name: Deploy to Netlify
         uses: nwtgck/actions-netlify@v3.0
-        if: ${{ inputs.deploy-netlify }}
         with:
           publish-dir: "./dist"
           production-branch: main
           github-token: ${{ secrets.GITHUB_TOKEN }}
-          deploy-message: "Deploy from GitHub Actions"
+          deploy-message: "Deployed from GitHub Actions"
         env:
           NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
           NETLIFY_SITE_ID: ${{ secrets.NETLIFY_SITE_ID }}
