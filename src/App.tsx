@@ -8,7 +8,7 @@ import { MainTemplate } from "./components/templates/main-template";
 
 function App() {
   const [count, setCount] = useState(0);
-  const environment = import.meta.env.VITE_APP_ENV || "unknown";
+  const environment = import.meta.env.VITE_ENVIRONMENT || "unknown";
 
   return (
     <AppProvider>

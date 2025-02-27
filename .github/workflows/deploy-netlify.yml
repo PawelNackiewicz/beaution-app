@@ -24,6 +24,8 @@ jobs:
 
       - name: Build app
         run: pnpm run build
+        env:
+          VITE_ENVIRONMENT: ${{ job.environment.name }}
 
       - name: Deploy to Netlify
         uses: nwtgck/actions-netlify@v3.0
