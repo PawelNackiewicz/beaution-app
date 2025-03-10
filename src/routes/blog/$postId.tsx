@@ -2,8 +2,14 @@ import { createFileRoute } from "@tanstack/react-router";
 
 export const Route = createFileRoute("/blog/$postId")({
   component: RouteComponent,
+  loader: async ({ params }) => {
+    return {
+      postId: params.postId,
+    };
+  },
 });
 
 function RouteComponent() {
-  return <div>Hello "/blog/$postId"!</div>;
+  const { postId } = Route.useLoaderData();
+  return <div>Hello blog - {postId}</div>;
 }
