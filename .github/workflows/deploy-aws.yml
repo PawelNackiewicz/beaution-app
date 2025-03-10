@@ -26,8 +26,8 @@ jobs:
         run: pnpm build
         env:
           VITE_ENVIRONMENT: ${{ job.environment.name }}
-          
-      - name: "Configure AWS Credentials" Action for GitHub Actions
+
+      - name: Configure AWS Credentials Action for GitHub Actions
         uses: aws-actions/configure-aws-credentials@v4.1.0
         with:
           aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
